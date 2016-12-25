@@ -1,0 +1,125 @@
+body {
+    margin:0;
+    text-align:center;
+    overflow:hidden;
+    background-color:black;
+    color:white;
+}
+.widget {
+    position: absolute;
+    background-color:black;
+    opacity: 0.8;
+    border-radius: 15px;
+    padding: 2vh 5vw;
+}
+#debug {
+    display: none;
+    font-size: 2vh;
+    right: 3vw;
+    top: 3vh;
+}
+#video {
+    height: 100vh;
+}
+#video.phase1, #video.phase0 {
+    opacity:0;
+}
+#timer {
+    bottom: -30vh;
+    box-shadow: 3px 3px 12px black;
+}
+#timer.phase3 {
+    opacity: 0.8;
+    font-size: 10vh;
+    right: 18vw;
+    text-align:center;
+}
+#timer.phase2 {
+    font-size: 10vh;
+    bottom: 10vh;
+}
+#timer.phase1 {
+    font-size: 48vh;
+    bottom: 26vh;
+    left: 27vw;
+    right: 27vw;
+    padding:0;
+    background-color: white;
+    color:black;
+}
+#timer.phase0 {
+    display:none;
+    bottom: -50vh;
+}
+#done {
+    opacity:0;
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+}
+#done video, #done img {
+    width: 100vw;
+    height: 100vh;
+}
+#done.phase1, #done.phase2, #done.phase3 {
+    opacity:0;
+}
+#done.phase0 {
+    opacity:1;
+}
+#btnpanel {
+    z-index: 9;
+    position: absolute;
+    background-color: #555;
+    transition: opacity 0.5s ease;
+    border-radius: 15px;
+    opacity:0;
+    bottom: 3vh;
+    left: 2vw;
+    width: 6vw;
+}
+#btnpanel img {
+    width: 4vw;
+    margin: 2vh 1vw;
+    opacity: 0.5;
+}
+#btnpanel img:hover {
+    opacity: 1;
+    cursor: pointer;
+}
+#settingsForm {
+    position: absolute;
+    box-shadow: 3px 3px 15px black;
+    background-color: #ccc;
+    border: 1px solid #777;
+    border-radius: 15px;
+    top: 120vh;
+    height: 58vh;
+    left: 35vw;
+    width: 30vw;
+    opacity: 0.98;
+    color: black;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 1.3vh;
+    text-align:left;
+    padding: 1vh 1vw;
+}
+form div {clear:both; margin-bottom: 0.3vh;}
+form h1 {margin:0.5vh 0 0 0; text-align:center; font-size: 2vh;}
+form h2 {border-bottom: 1px solid black; margin: 1.5vh 0 0.5vh 0; font-size: 1.5vh; clear:both;}
+form label {
+    font-weight:bold;
+    display:block;
+    float:left;
+    width:9vw;
+    text-align:right;
+    padding-top: 0.2vh;
+    padding-right: 0.5vw;
+}
+form input {font-size: 1.1vh; border-radius: 5px; padding: 0.1vh 0.2vw;}
+form input[type=text] {width: 17vw;}
+form input[type=time] {width: 9vw;}
+form input[type=number] {width: 4vw;}
+form button {font-size: 1.1vh; padding: 0.25vh 1vw; margin-left: 3vw; margin-top: 1vh;}
