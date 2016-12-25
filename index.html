@@ -100,7 +100,7 @@
             border: 1px solid #777;
             border-radius: 15px;
             top: 120vh;
-            height: 50vh;
+            height: 58vh;
             left: 35vw;
             width: 30vw;
             opacity: 0.98;
@@ -199,7 +199,7 @@
         // Dependencies
         let moment=require("moment");
         require("moment-duration-format");
-        let fs=require("fs");
+        let fs=require("fs-extra");
         let jQuery=$=require("./bower_components/jquery/dist/jquery.min.js");
         require("./bower_components/jquery-ui/jquery-ui.min.js");
 
@@ -208,8 +208,22 @@
         const main=remote.require("./main.js");
 
         // Get Configs
-        env=process.env.NODE_ENV || "default";
-        let config=require(`./config/${env}.json`);
+        const env=process.env.NODE_ENV || "prefs";
+        let config;
+        let configTries=0;
+        do {
+            console.log(`Try ${configTries}`);
+            try {
+                config=require(`./config/${env}.json`);
+            } catch(err) {
+                try {
+                    fs.copySync(`${__dirname}/config/default.json`,`${__dirname}/config/${env}.json`);
+                } catch(err) {
+                    alert("Had problems initializing the settings! "+err);
+                }
+            }
+        }
+        while ( typeof config=="undefined" && ++configTries<2 );
 
         // Settings Form 
         function displaySettings() {
@@ -233,7 +247,9 @@
             config.phase1threshold=$("#frmPhase1threshold").val();
             config.doneVideo=$("#frmDoneVideo").val();
             config.donePic=$("#frmDonePic").val();
-            fs.writeFile(`./config/${env}.json`,JSON.stringify(config));
+            fs.writeJson(`${__dirname}/config/${env}.json`,config,(err)=>{
+                if(err) alert("Could not save settings. "+err);
+            });
             initApp();
         }
         $("#btnCancel").click(hideSettings);
@@ -300,6 +316,7 @@
                 videos=[];
             }
             // Final run
+            if( ! videos.length ) displaySettings();
             setPhase(3);
             loadRandomVideo();
             updateTimer();
