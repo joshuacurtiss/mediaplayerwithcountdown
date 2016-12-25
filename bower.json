@@ -1,0 +1,20 @@
+{
+  "name": "videoplayerwithcountdown",
+  "description": "A video player with a countdown timer to a set time.",
+  "main": "main.js",
+  "authors": [
+    "Josh Curtiss <josh@curtiss.me>"
+  ],
+  "license": "GPL-3.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery-ui": "1.12.1"
+  }
+}

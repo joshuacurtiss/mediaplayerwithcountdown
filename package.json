@@ -1,0 +1,29 @@
+{
+  "name": "videoplayerwithcountdown",
+  "version": "1.0.0",
+  "description": "A video player with a countdown timer to a set time.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js",
+    "build": "electron-packager . VideoPlayerWithCountdown --ignore=node_modules/electron-* --out=builds --overwrite",
+    "postinstall": "bower install -F"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/joshuacurtiss/kingdom-hall.git"
+  },
+  "author": "Josh Curtiss <josh@curtiss.me>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshuacurtiss/kingdom-hall/issues"
+  },
+  "homepage": "https://github.com/joshuacurtiss/kingdom-hall",
+  "devDependencies": {
+    "electron-packager": "^8.2.0",
+    "electron-prebuilt": "^1.4.7"
+  },
+  "dependencies": {
+    "moment": "^2.17.1",
+    "moment-duration-format": "^1.3.0"
+  }
+}
