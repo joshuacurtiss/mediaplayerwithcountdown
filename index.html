@@ -329,6 +329,13 @@
         var btnpanelTimeout;
         $("#quit").click(()=>{main.quit()});
         $("#settings").click(displaySettings);
+        $(window).keydown((e)=>{
+            var key=e.key.toLowerCase();
+            if( $(e.target).is("input") ) return true;
+            else if( key=="q" || key=="x" || e.keyCode==27 ) main.quit();
+            else if( key=="s" || key=="c" ) displaySettings();
+            else return false;
+        })
         $(window).mousemove(()=>{
             var currentStatus=btnpanelStatus;
             btnpanelStatus=true;
@@ -336,7 +343,7 @@
             if(btnpanelTimeout) clearTimeout(btnpanelTimeout);
             btnpanelTimeout=setTimeout(()=>{
                 $("#btnpanel").animate({"opacity":0},400,()=>{btnpanelStatus=false});
-            },5000);
+            },2000);
         })
         
         // Start things up (pick a video, start timer)
