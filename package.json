@@ -1,23 +1,23 @@
 {
-  "name": "videoplayerwithcountdown",
+  "name": "mediaplayerwithcountdown",
   "version": "1.0.0",
-  "description": "A video player with a countdown timer to a set time.",
+  "description": "A media player with a countdown timer to a set time.",
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "build": "electron-packager . VideoPlayerWithCountdown --ignore=node_modules/electron-* --out=builds --overwrite",
+    "build": "electron-packager . MediaPlayerWithCountdown --ignore=node_modules/electron-* --out=builds --overwrite",
     "postinstall": "bower install -F"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/joshuacurtiss/kingdom-hall.git"
+    "url": "https://github.com/joshuacurtiss/mediaplayerwithcountdown.git"
   },
   "author": "Josh Curtiss <josh@curtiss.me>",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/joshuacurtiss/kingdom-hall/issues"
+    "url": "https://github.com/joshuacurtiss/mediaplayerwithcountdown/issues"
   },
-  "homepage": "https://github.com/joshuacurtiss/kingdom-hall",
+  "homepage": "https://github.com/joshuacurtiss/mediaplayerwithcountdown",
   "devDependencies": {
     "electron-packager": "^8.2.0",
     "electron-prebuilt": "^1.4.7"

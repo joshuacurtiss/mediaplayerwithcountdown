@@ -1,11 +1,11 @@
 {
-  "name": "videoplayerwithcountdown",
-  "description": "A video player with a countdown timer to a set time.",
+  "name": "mediaplayerwithcountdown",
+  "description": "A media player with a countdown timer to a set time.",
   "main": "main.js",
   "authors": [
     "Josh Curtiss <josh@curtiss.me>"
   ],
-  "license": "GPL-3.0",
+  "license": "MIT",
   "private": true,
   "ignore": [
     "**/.*",
