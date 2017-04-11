@@ -67,6 +67,7 @@ var goal;
 var imageTimeout;
 const VIDEO_EXTS=["m4v","mov","mp4","webm"];
 const IMAGE_EXTS=["png","jpg","jpeg","gif","bmp"];
+const FADE_DURATION=2;
 
 // Functions
 function setPhase(ph) {
@@ -111,11 +112,18 @@ function setVideo(f) {
     // Determine if this was successful. If same as prev, that's not successful! Unless there's only one media item.
     var success=(prevPath!=path || videos.length==1);
     // Set the media!
-    if( success && isImage(f) ) {
-        $elem.css("background-image",path).attr("src","");
-        imageTimeout=setTimeout(loadRandomVideo,config.imageDuration*1000);
-    } else if( success && isVideo(f) ) {
-        $elem.attr("src",path).css("background-image","none");
+    if( success && (isImage(f) || isVideo(f)) ) {
+        // Fade out
+        $elem.addClass("fadeout",FADE_DURATION*1000,_=>{
+            // Set the new media
+            if( isImage(f) ) $elem.attr("src","").css("background-image",path);
+            else $elem.css("background-image","none").attr("src",path)
+            // Fade back in
+            $elem.removeClass("fadeout",FADE_DURATION*1000,_=>{
+                // For images, set the timeout period
+                if( isImage(f) ) imageTimeout=setTimeout(loadRandomVideo,config.imageDuration*1000);
+            });
+        })
     } else {
         success=false;
     }

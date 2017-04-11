@@ -25,7 +25,7 @@ body {
     background-position: center center;
     background-size: contain;
 }
-#video.phase1, #video.phase0 {
+#video.phase1, #video.phase0, #video.fadeout {
     opacity:0;
 }
 #timer {
