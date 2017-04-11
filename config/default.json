@@ -4,5 +4,6 @@
     "doneVideo": "",
     "donePic": "done/done-sample.png",
     "phase2threshold": 600,
-    "phase1threshold": 60
+    "phase1threshold": 60,
+    "imageDuration": 30
 }

@@ -21,19 +21,23 @@
     <form id="settingsForm">
         <h1>Settings</h1>
         <p>
-            This app will randomly play videos from a given directory until a target time arrives.
+            This app will randomly play media from a given directory until a target time arrives.
             As that time gets closer, the timer will become more prominent. When the time finally arrives,
             a provided image or video will be displayed.
         </p>
-        <h2>Video Library</h2>
-        <p>Any videos in this directory will be played in a random order.</p>
+        <h2>Media Library</h2>
+        <p>Any videos and images in this directory will be played in a random order.</p>
         <div>
-            <label>Video Directory:</label>
+            <label>Directory:</label>
             <input type="text" id="frmVideoDirectory" />
+        </div>
+        <div>
+            <label>Image Duration:</label>
+            <input type="number" id="frmImageDuration" />
         </div>
         <h2>Countdown Timer</h2>
         <p>
-            You can provide the target time when the videos will stop playing. 
+            You can provide the target time when the media will stop playing. 
             You can also specify when the timer will appear and when it will fill the screen, becoming
             more prominent.
         </p>
