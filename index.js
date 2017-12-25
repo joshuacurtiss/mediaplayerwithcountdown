@@ -1,31 +1,19 @@
 // Dependencies
-let moment=require("moment");
+const SettingsUtil=require("./model/SettingsUtil");
+const moment=require("moment");
 require("moment-duration-format");
-let fs=require("fs-extra");
-let jQuery=$=require("./bower_components/jquery/dist/jquery.min.js");
+const fs=require("fs-extra");
+const path=require("path");
+const jQuery=$=require("./bower_components/jquery/dist/jquery.min.js");
 require("./bower_components/jquery-ui/jquery-ui.min.js");
 
 // Link to main process
 const remote=require("electron").remote;
 const main=remote.require("./main.js");
+const APPDATADIR=remote.app.getPath('userData')+path.sep;
 
 // Get Configs
-const env=process.env.NODE_ENV || "prefs";
-let config;
-let configTries=0;
-do {
-    console.log(`Try ${configTries}`);
-    try {
-        config=require(`./config/${env}.json`);
-    } catch(err) {
-        try {
-            fs.copySync(`${__dirname}/config/default.json`,`${__dirname}/config/${env}.json`);
-        } catch(err) {
-            alert("Had problems initializing the settings! "+err);
-        }
-    }
-}
-while ( typeof config=="undefined" && ++configTries<2 );
+var config=new SettingsUtil(APPDATADIR+"settings.json");
 
 // Settings Form 
 function displaySettings() {
@@ -51,9 +39,7 @@ function saveSettings() {
     config.phase1threshold=$("#frmPhase1threshold").val();
     config.doneVideo=$("#frmDoneVideo").val();
     config.donePic=$("#frmDonePic").val();
-    fs.writeJson(`${__dirname}/config/${env}.json`,config,(err)=>{
-        if(err) alert("Could not save settings. "+err);
-    });
+    config.save();
     initApp();
 }
 $("#btnCancel").click(hideSettings);
@@ -103,21 +89,21 @@ function updateTimer() {
 function setVideo(f) {
     if(imageTimeout) clearTimeout(imageTimeout);
     // Calculate path for media (regardless of image/video)
-    var path=`${config.videoDirectory}/${f}`;
-    if( isImage(f) ) path=`url("file://${path}")`;
+    var mediapath=`${config.videoDirectory}/${f}`;
+    if( isImage(f) ) mediapath=`url("file://${mediapath}")`;
     // Get the previous path
     var $elem=$("#video");
     var prevPath=$elem.attr("src");
     if( !prevPath ) prevPath=$elem.css("background-image");
     // Determine if this was successful. If same as prev, that's not successful! Unless there's only one media item.
-    var success=(prevPath!=path || videos.length==1);
+    var success=(prevPath!=mediapath || videos.length==1);
     // Set the media!
     if( success && (isImage(f) || isVideo(f)) ) {
         // Fade out
         $elem.addClass("fadeout",FADE_DURATION*1000,_=>{
             // Set the new media
-            if( isImage(f) ) $elem.attr("src","").css("background-image",path);
-            else $elem.css("background-image","none").attr("src",path)
+            if( isImage(f) ) $elem.attr("src","").css("background-image",mediapath);
+            else $elem.css("background-image","none").attr("src",mediapath)
             // Fade back in
             $elem.removeClass("fadeout",FADE_DURATION*1000,_=>{
                 // For images, set the timeout period
