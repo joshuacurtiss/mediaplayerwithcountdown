@@ -101,8 +101,8 @@ body {
     border-radius: 15px;
     top: 120vh;
     height: 58vh;
-    left: 35vw;
-    width: 30vw;
+    left: 33vw;
+    width: 34vw;
     opacity: 0.98;
     color: black;
     font-family: Arial, Helvetica, sans-serif;
@@ -110,7 +110,8 @@ body {
     text-align:left;
     padding: 1vh 1vw;
 }
-form div {clear:both; margin-bottom: 0.3vh;}
+form div {clear:both; margin-bottom: 0.5vh;}
+.settingsBtnContainer {margin-top: 2vh;}
 form h1 {margin:0.5vh 0 0 0; text-align:center; font-size: 2vh;}
 form h2 {border-bottom: 1px solid black; margin: 1.5vh 0 0.5vh 0; font-size: 1.5vh; clear:both;}
 form label {
@@ -123,7 +124,7 @@ form label {
     padding-right: 0.5vw;
 }
 form input {font-size: 1.1vh; border-radius: 5px; padding: 0.1vh 0.2vw;}
-form input[type=text] {width: 17vw;}
+form input[type=text] {width: 15vw;}
 form input[type=time] {width: 9vw;}
 form input[type=number] {width: 4vw;}
-form button {font-size: 1.1vh; padding: 0.25vh 1vw; margin-left: 3vw; margin-top: 1vh;}
+form button {font-size: 1.1vh; padding: 0.25vh 1vw; margin-left: 0.5vw;}

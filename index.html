@@ -30,6 +30,7 @@
         <div>
             <label>Directory:</label>
             <input type="text" id="frmVideoDirectory" />
+            <button type="button" id="frmVideoDirectoryBrowse">Browse&hellip;</button>
         </div>
         <div>
             <label>Image Duration:</label>
@@ -56,17 +57,13 @@
         <h2>Completion Media</h2>
         <p>
             The video or picture that you provide will be displayed when the timer runs to zero.
-            If you provide both, the video will be chosen and the picture will be ignored.
         </p>
         <div>
-            <label>Video:</label>
-            <input type="text" id="frmDoneVideo" />
+            <label>Video or Image:</label>
+            <input type="text" id="frmDoneMedia" />
+            <button type="button" id="frmDoneMediaBrowse">Browse&hellip;</button>
         </div>
-        <div>
-            <label>Picture:</label>
-            <input type="text" id="frmDonePic" />
-        </div>
-        <div>
+        <div class="settingsBtnContainer">
             <label>&nbsp;</label>
             <button type="button" id="btnCancel">Cancel</button>
             <button type="button" id="btnSave">Save</button>

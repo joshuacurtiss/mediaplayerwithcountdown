@@ -23,8 +23,7 @@ function displaySettings() {
         .find("#frmTime").val(config.time).end()
         .find("#frmPhase2threshold").val(config.phase2threshold).end()
         .find("#frmPhase1threshold").val(config.phase1threshold).end()
-        .find("#frmDoneVideo").val(config.doneVideo).end()
-        .find("#frmDonePic").val(config.donePic).end()
+        .find("#frmDoneMedia").val(config.doneMedia).end()
         .animate({"top":"20vh"},400);
 }
 function hideSettings() {
@@ -37,13 +36,33 @@ function saveSettings() {
     config.imageDuration=$("#frmImageDuration").val();
     config.phase2threshold=$("#frmPhase2threshold").val();
     config.phase1threshold=$("#frmPhase1threshold").val();
-    config.doneVideo=$("#frmDoneVideo").val();
-    config.donePic=$("#frmDonePic").val();
+    config.doneMedia=$("#frmDoneMedia").val();
     config.save();
     initApp();
 }
+function handleVideoDirectoryBrowse(){
+    remote.dialog.showOpenDialog(main.win,{
+        title: "Select Directory",
+        buttonLabel: "Select",
+        message: "Please choose a directory.",
+        properties: ['openDirectory','createDirectory']
+    }, function(dir){
+        $("#frmVideoDirectory").val(dir?dir[0]:"");
+    });
+}
+function handleDoneMediaBrowse(){
+    remote.dialog.showOpenDialog(main.win,{
+        title: "Select Done Media",
+        buttonLabel: "Select",
+        message: "Choose an image or video."
+    }, function(dir){
+        $("#frmDoneMedia").val(dir?dir[0]:"");
+    });
+}
 $("#btnCancel").click(hideSettings);
 $("#btnSave").click(saveSettings);
+$("#frmVideoDirectoryBrowse").click(handleVideoDirectoryBrowse);
+$("#frmDoneMediaBrowse").click(handleDoneMediaBrowse);
 
 // Globals 
 var phase=9;
@@ -51,8 +70,8 @@ var timer;
 var videos=[];
 var goal;
 var imageTimeout;
-const VIDEO_EXTS=["m4v","mov","mp4","webm"];
-const IMAGE_EXTS=["png","jpg","jpeg","gif","bmp"];
+const VIDEO_EXTS=[".m4v",".mov",".mp4",".webm",".avi"];
+const IMAGE_EXTS=[".png",".jpg",".jpeg",".gif",".bmp"];
 const FADE_DURATION=2;
 
 // Functions
@@ -68,11 +87,11 @@ function getRandomInt(min, max) { // Returns a random number between min (inclus
     return Math.floor(Math.random() * (max - min)) + min;
 }
 function isImage(f) {
-    var ext=f.split(".").pop().toLowerCase();
+    var ext=path.extname(f).toLowerCase();
     return (IMAGE_EXTS.indexOf(ext)>=0);
 }
 function isVideo(f) {
-    var ext=f.split(".").pop().toLowerCase();
+    var ext=path.extname(f).toLowerCase();
     return (VIDEO_EXTS.indexOf(ext)>=0);
 }
 function updateTimer() {
@@ -123,11 +142,11 @@ function initApp() {
     $("#timer, #video, #done").removeClass("phase3 phase2 phase1 phase0");
     if(timer) clearTimeout(timer);
     // Done materials
-    if( config.doneVideo||"" != "" ) {
-        $("#donevideo").show().attr("src",config.doneVideo);
+    if( isVideo(config.doneMedia) ) {
+        $("#donevideo").show().attr("src",config.doneMedia);
         $("#donepic").hide();
-    } else if( config.donePic||"" != "" ) {
-        $("#donepic").show().attr("src",config.donePic);
+    } else if( isImage(config.doneMedia) ) {
+        $("#donepic").show().attr("src",config.doneMedia);
         $("#donevideo").hide();
     }
     // Time
