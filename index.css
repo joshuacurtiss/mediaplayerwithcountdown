@@ -82,16 +82,23 @@ body {
     opacity:0;
     bottom: 3vh;
     left: 2vw;
-    width: 6vw;
 }
-#btnpanel img {
-    width: 4vw;
-    margin: 2vh 1vw;
-    opacity: 0.5;
-}
-#btnpanel img:hover {
-    opacity: 1;
+#btnpanel i {
+    display: block;
+    font-size: 5vh;
+    margin: 3.5vh 1.5vw;
+    opacity: 0.8;
     cursor: pointer;
+    background-color: #999;
+    padding: 9px 6px;
+    border-radius: 50%;
+}
+#btnpanel i:hover {
+    opacity: 1;
+}
+#btnpanel i:active {
+    opacity: 1;
+    background-color: #a4a4a4;
 }
 #settingsForm {
     position: absolute;
