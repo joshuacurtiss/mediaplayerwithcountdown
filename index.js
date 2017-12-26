@@ -47,7 +47,7 @@ function handleVideoDirectoryBrowse(){
         message: "Please choose a directory.",
         properties: ['openDirectory','createDirectory']
     }, function(dir){
-        $("#frmVideoDirectory").val(dir?dir[0]:"");
+        if(dir) $("#frmVideoDirectory").val(dir?dir[0]:"");
     });
 }
 function handleDoneMediaBrowse(){
@@ -56,7 +56,7 @@ function handleDoneMediaBrowse(){
         buttonLabel: "Select",
         message: "Choose an image or video."
     }, function(dir){
-        $("#frmDoneMedia").val(dir?dir[0]:"");
+        if(dir) $("#frmDoneMedia").val(dir?dir[0]:"");
     });
 }
 $("#btnCancel").click(hideSettings);
@@ -142,13 +142,10 @@ function initApp() {
     $("#timer, #video, #done").removeClass("phase3 phase2 phase1 phase0");
     if(timer) clearTimeout(timer);
     // Done materials
-    if( isVideo(config.doneMedia) ) {
-        $("#donevideo").show().attr("src",config.doneMedia);
-        $("#donepic").hide();
-    } else if( isImage(config.doneMedia) ) {
-        $("#donepic").show().attr("src",config.doneMedia);
-        $("#donevideo").hide();
-    }
+    $("#donepic").hide();
+    $("#donevideo").hide();
+    if( isVideo(config.doneMedia) ) $("#donevideo").show().attr("src",config.doneMedia);
+    else if( isImage(config.doneMedia) ) $("#donepic").show().attr("src",config.doneMedia);
     // Time
     var today=new moment();
     goal=new moment(today.format("MM/DD/YY")+" "+config.time);
