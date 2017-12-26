@@ -13,10 +13,12 @@ const main=remote.require("./main.js");
 const APPDATADIR=remote.app.getPath('userData')+path.sep;
 
 // Get Configs
-var config=new SettingsUtil(APPDATADIR+"settings.json");
+var config=main.settings;
 
 // Settings Form 
 function displaySettings() {
+    var dispHtml="";
+    main.displays.forEach((disp,index)=>dispHtml+=`<option value="${index}">Display #${index+1}</option>`);
     $("#settingsForm")
         .find("#frmVideoDirectory").val(config.videoDirectory).end()
         .find("#frmImageDuration").val(config.imageDuration).end()
@@ -24,6 +26,7 @@ function displaySettings() {
         .find("#frmPhase2threshold").val(config.phase2threshold).end()
         .find("#frmPhase1threshold").val(config.phase1threshold).end()
         .find("#frmDoneMedia").val(config.doneMedia).end()
+        .find("#frmDisplay").html(dispHtml).val(config.display).end()
         .animate({"top":"20vh"},400);
 }
 function hideSettings() {
@@ -37,8 +40,9 @@ function saveSettings() {
     config.phase2threshold=$("#frmPhase2threshold").val();
     config.phase1threshold=$("#frmPhase1threshold").val();
     config.doneMedia=$("#frmDoneMedia").val();
+    config.display=parseInt($("#frmDisplay").val());
     config.save();
-    initApp();
+    main.initApp();
 }
 function handleVideoDirectoryBrowse(){
     remote.dialog.showOpenDialog(main.win,{
@@ -74,7 +78,7 @@ const VIDEO_EXTS=[".m4v",".mov",".mp4",".webm",".avi"];
 const IMAGE_EXTS=[".png",".jpg",".jpeg",".gif",".bmp"];
 const FADE_DURATION=2;
 
-// Functions
+// Video Functions
 function setPhase(ph) {
     if(phase!=ph) {
         phase=ph;
@@ -137,6 +141,8 @@ function setVideo(f) {
 function loadRandomVideo() {
     if( videos.length && ! setVideo(videos[getRandomInt(0,videos.length)]) ) loadRandomVideo();
 }
+
+// Initialization
 function initApp() {
     // Some cleanup if restarting
     $("#timer, #video, #done").removeClass("phase3 phase2 phase1 phase0");
@@ -162,9 +168,7 @@ function initApp() {
     updateTimer();
 }
 
-$('#video').on('ended',loadRandomVideo);
-
-// Quit/Settings Buttons
+// Wire up events
 var btnpanelStatus=false;
 var btnpanelTimeout;
 $("#quit").click(()=>{main.quit()});
@@ -185,6 +189,7 @@ $(window).mousemove(()=>{
         $("#btnpanel").animate({"opacity":0},400,()=>{btnpanelStatus=false});
     },2000);
 })
+$('#video').on('ended',loadRandomVideo);
 
 // Start things up (pick a video, start timer)
 initApp();

@@ -36,7 +36,8 @@ SettingsUtil.DEFAULTS={
     "doneMedia": "",
     "phase2threshold": 600,
     "phase1threshold": 60,
-    "imageDuration": 30
+    "imageDuration": 30,
+    "display": 0
 };
 
 module.exports=SettingsUtil;
