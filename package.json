@@ -5,22 +5,49 @@
   "main": "main.js",
   "scripts": {
     "start": "electron main.js",
-    "build": "electron-packager . MediaPlayerWithCountdown --ignore=node_modules/electron-* --out=builds --overwrite",
-    "postinstall": "bower install -F"
+    "postinstall": "node_modules/.bin/bower install -F",
+    "gentiff": "tiffutil -cathidpicheck dev/dmgbackground.png dev/dmgbackground@2x.png -out icons/mac/dmgbackground.tiff",
+    "package": "node_modules/.bin/electron-builder --dir",
+    "build-installer-mac": "node_modules/.bin/electron-builder --mac",
+    "build-installer-win": "node_modules/.bin/electron-builder --win --x64 --ia32"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/joshuacurtiss/mediaplayerwithcountdown.git"
   },
   "author": "Josh Curtiss <josh@curtiss.me>",
+  "build": {
+    "appId": "me.curtiss.mediaplayerwithcountdown",
+    "compression": "maximum",
+    "productName": "Media Countdown",
+    "directories": {
+      "output": "builds"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "icons/mac/icon.icns"
+    },
+    "dmg": {
+      "background": "icons/mac/dmgbackground.tiff"
+    },
+    "win": {
+      "target": "nsis",
+      "icon": "icons/win/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowElevation": true
+    }
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/joshuacurtiss/mediaplayerwithcountdown/issues"
   },
   "homepage": "https://github.com/joshuacurtiss/mediaplayerwithcountdown",
   "devDependencies": {
-    "electron-packager": "^8.2.0",
-    "electron-prebuilt": "^1.4.7"
+    "bower": "^1.8.2",
+    "electron": "^1.7.9",
+    "electron-builder": "^19.49.2"
   },
   "dependencies": {
     "font-awesome": "^4.7.0",
