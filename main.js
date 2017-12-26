@@ -3,7 +3,7 @@ const {app, BrowserWindow} = electron;
 
 app.on("ready", () => {
     var videoWin=new BrowserWindow({width:640, height:480, fullscreen:true, frame:false});
-    videoWin.loadURL(`file://${__dirname}/index.html`);
+    videoWin.loadURL(`file://${__dirname}/views/index.html`);
     exports.win=videoWin;
 });
 
