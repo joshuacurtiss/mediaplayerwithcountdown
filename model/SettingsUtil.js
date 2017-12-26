@@ -31,9 +31,9 @@ class SettingsUtil {
 }
 
 SettingsUtil.DEFAULTS={
-    "time": "13:00",
+    "time": "19:00",
     "videoDirectory": "",
-    "doneMedia": "done/done-sample.png",
+    "doneMedia": "",
     "phase2threshold": 600,
     "phase1threshold": 60,
     "imageDuration": 30
