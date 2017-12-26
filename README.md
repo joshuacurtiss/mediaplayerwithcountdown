@@ -6,9 +6,16 @@ countdown goes fullscreen.
 
 A final video or image is displayed when the countdown time arrives.
 
-## Getting Started ##
+This functionality is especially useful in sign language meetings to play videos of the songs before the meeting, and you can display an image announcing the start of the meeting when the time comes.
+
+## How do I compile it myself? ##
+
+The application runs on [Node.js](https://nodejs.org) and is compatible with Mac and Windows. to compile it, you will need Node.js installed.
+
+After you download or clone the source, install all dependencies and run the build script.
+It is named `build-installer-win` for Windows and `build-installer-mac` for Mac. For instance, to build for Windows:
 
 ```
 npm install
-npm run build
+npm run build-installer-win
 ```
