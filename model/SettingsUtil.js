@@ -4,7 +4,7 @@ class SettingsUtil {
 
     constructor(path) {
         this.path=path;
-        Object.assign(this,SettingsUtil.DEFAULTS);
+        this.deepAssign(this,SettingsUtil.DEFAULTS);
         this.load();
         return this;
     }
@@ -13,7 +13,7 @@ class SettingsUtil {
         try {
             if( this.path.length ) {
                 var loadedSettings=fs.readJsonSync(this.path);
-                Object.assign(this,loadedSettings);
+                this.deepAssign(this,loadedSettings);
             }
         } catch(e) {}
     }
@@ -28,16 +28,34 @@ class SettingsUtil {
         } catch(e) {}
     }
 
+    // Used to act like Object.assign() except with deep copies of arrays/objects
+    deepAssign(orig,obj) {
+        var v;
+        for( var key in obj ) {
+            v=obj[key];
+            if( typeof v==="object" ) {
+                orig[key]=Array.isArray(v)?[]:{};
+                this.deepAssign(orig[key],v);
+            } else {
+                orig[key]=v;
+            }
+        }
+    }
+
 }
 
-SettingsUtil.DEFAULTS={
-    "time": "19:00",
+SettingsUtil.INSTANCEDEFAULTS={
+    "startTime": "18:00",
+    "endTime": "19:00",
     "videoDirectory": "",
     "doneMedia": "",
     "phase2threshold": 600,
     "phase1threshold": 60,
-    "imageDuration": 30,
-    "display": 0
+    "imageDuration": 30
 };
+SettingsUtil.DEFAULTS={
+    "display": 0,
+    "instances": []
+}
 
 module.exports=SettingsUtil;

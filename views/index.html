@@ -2,6 +2,7 @@
 <head>
     <title>Media Player with Countdown</title>
     <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="../bower_components/jquery-ui/themes/smoothness/jquery-ui.min.css" />
     <link rel="stylesheet" href="index.css" />
 </head>
 <body>
@@ -26,16 +27,40 @@
             As that time gets closer, the timer will become more prominent. When the time finally arrives,
             a provided image or video will be displayed.
         </p>
+        <h2>Display Selection</h2>
+        <p>
+            You can choose to display this application on a secondary display.
+        </p>
+        <div>
+            <label>Display:</label>
+            <select id="frmDisplay"></select>
+        </div>
+        <h2>Meeting Settings</h2>
+        <p>
+            You can have specific settings for different meeting times.
+        </p>
+        <div id="tabs">
+            <ul id="list">
+                <li><a href="#newtab" id="create_tab">+</a></li>
+            </ul>
+        </div>
+        <div class="settingsBtnContainer">
+            <label>&nbsp;</label>
+            <button type="button" id="btnCancel">Cancel</button>
+            <button type="button" id="btnSave">Save</button>
+        </div>
+    </form>
+    <div id="settingsTabTemplate" class="tab">
         <h2>Media Library</h2>
         <p>Any videos and images in this directory will be played in a random order.</p>
         <div>
             <label>Directory:</label>
-            <input type="text" id="frmVideoDirectory" />
-            <button type="button" id="frmVideoDirectoryBrowse">Browse&hellip;</button>
+            <input type="text" class="frmVideoDirectory" />
+            <button type="button" class="frmVideoDirectoryBrowse">Browse&hellip;</button>
         </div>
         <div>
             <label>Image Duration:</label>
-            <input type="number" id="frmImageDuration" />
+            <input type="number" class="frmImageDuration" />
             seconds
         </div>
         <h2>Countdown Timer</h2>
@@ -46,15 +71,17 @@
         </p>
         <div>
             <label>Target Time:</label>
-            <input type="time" id="frmTime" />
+            <input type="time" class="frmStartTime" />
+            to
+            <input type="time" class="frmEndTime" />
         </div>
         <div>
             <label>Start showing timer:</label>
-            <input type="number" id="frmPhase2threshold" /> seconds remaining.
+            <input type="number" class="frmPhase2threshold" /> seconds remaining.
         </div>
         <div>
             <label>Fullscreen timer:</label>
-            <input type="number" id="frmPhase1threshold" /> seconds remaining.
+            <input type="number" class="frmPhase1threshold" /> seconds remaining.
         </div>
         <h2>Completion Media</h2>
         <p>
@@ -62,23 +89,10 @@
         </p>
         <div>
             <label>Video or Image:</label>
-            <input type="text" id="frmDoneMedia" />
-            <button type="button" id="frmDoneMediaBrowse">Browse&hellip;</button>
+            <input type="text" class="frmDoneMedia" />
+            <button type="button" class="frmDoneMediaBrowse">Browse&hellip;</button>
         </div>
-        <h2>Display Selection</h2>
-        <p>
-            You can choose to display this application on a secondary display.
-        </p>
-        <div>
-            <label>Display:</label>
-            <select id="frmDisplay"></select>
-        </div>
-        <div class="settingsBtnContainer">
-            <label>&nbsp;</label>
-            <button type="button" id="btnCancel">Cancel</button>
-            <button type="button" id="btnSave">Save</button>
-        </div>
-    </form>
+    </div>
     <div id="debug" class="widget"></div>
     <script src="index.js"></script>
 </body>

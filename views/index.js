@@ -12,36 +12,103 @@ const remote=require("electron").remote;
 const main=remote.require("./main.js");
 const APPDATADIR=remote.app.getPath('userData')+path.sep;
 
-// Get Configs
-var config=main.settings;
+// Get Settings (all settings) and Configs (the settings that apply right now)
+var settings=main.settings;
+var config=settings.instances.find(instance=>{
+    var now=moment();
+    var day=now.format("MM/DD/YYYY ");
+    var start=moment(day+instance.startTime);
+    var end=moment(day+instance.endTime);
+    return now.diff(start)>0 && now.diff(end)<0;
+});
 
 // Settings Form 
+
+// Physically add a tab to the settings form
+function addTab(data=SettingsUtil.INSTANCEDEFAULTS) {
+    var $tabs=$("#tabs");
+    var tid=$("#tabs .tab").last().attr("id");
+    if( tid===undefined ) tid="0";
+    tid=parseInt(tid.replace("tab","")) + 1;
+    var li=$("<li/>").addClass("tabli").insertBefore("#list li:last");
+    $("<a/>", {text: "New", id: "tablink"+tid, href: "#tab"+tid}).appendTo(li);
+    var $newtab=$("#settingsTabTemplate").clone()
+        .attr("id", "tab" + tid)
+        .find(".frmVideoDirectoryBrowse").click(handleVideoDirectoryBrowse).end()
+        .find(".frmDoneMediaBrowse").click(handleDoneMediaBrowse).end()
+        .find(".frmStartTime").change(handleTimeChange).end()
+        .find(".frmEndTime").change(handleTimeChange).end()
+        .appendTo($tabs);
+    $tabs.tabs("refresh");
+    if(data) populateTab($newtab,data);
+    setTimeout(function(){$tabs.tabs("option","active",-2)},1);
+}
+// Populate a settings tab with some settings
+function populateTab($tab,data) {
+    $tab
+        .find(".frmVideoDirectory").val(data.videoDirectory).end()
+        .find(".frmImageDuration").val(data.imageDuration).end()
+        .find(".frmStartTime").val(data.startTime).end()
+        .find(".frmEndTime").val(data.endTime).end()
+        .find(".frmPhase2threshold").val(data.phase2threshold).end()
+        .find(".frmPhase1threshold").val(data.phase1threshold).end()
+        .find(".frmDoneMedia").val(data.doneMedia).end()
+    if( data.startTime.length && data.endTime.length ) updateTabLink($tab);
+}
+// Change event handler for the settings time fields
+function handleTimeChange(event) {
+    updateTabLink($(event.target).closest(".tab"));
+}
+// Update link text to have the time range of it's settings time fields
+function updateTabLink(tab) {
+    const TFMT="h:mma";
+    const FAKEDATE="01/01/01 ";
+    var $tab=$(tab);
+    var tid=$tab.attr("id").replace("tab","");
+    var $tablink=$("#tablink"+tid);
+    // TODO: These could be erroneous time values. Make this more resilient.
+    var start=moment(FAKEDATE+$tab.find(".frmStartTime").val());
+    var end=moment(FAKEDATE+$tab.find(".frmEndTime").val());
+    var txt=start.format(TFMT)+"-"+end.format(TFMT);
+    $tablink.text(txt);
+}
 function displaySettings() {
+    var $tabs = $("#tabs").tabs();
+    // Clear out tabs
+    $tabs
+        .find(".tabli").remove().end()
+        .find(".tab").remove().end();
+    // Rewrite tabse
+    settings.instances.forEach(instance=>addTab(instance));
+    if( settings.instances.length==0 ) addTab(); // If no instances, start a blank one
+    // Write the displays pulldown, display settings form
     var dispHtml="";
     main.displays.forEach((disp,index)=>dispHtml+=`<option value="${index}">Display #${index+1}</option>`);
     $("#settingsForm")
-        .find("#frmVideoDirectory").val(config.videoDirectory).end()
-        .find("#frmImageDuration").val(config.imageDuration).end()
-        .find("#frmTime").val(config.time).end()
-        .find("#frmPhase2threshold").val(config.phase2threshold).end()
-        .find("#frmPhase1threshold").val(config.phase1threshold).end()
-        .find("#frmDoneMedia").val(config.doneMedia).end()
-        .find("#frmDisplay").html(dispHtml).val(config.display).end()
-        .animate({"top":"20vh"},400);
+        .find("#frmDisplay").html(dispHtml).val(settings.display).end()
+        .animate({"top":"8vh"},400);
 }
 function hideSettings() {
     $("#settingsForm").animate({"top":"120vh"},200);
 }
 function saveSettings() {
     hideSettings();
-    config.time=$("#frmTime").val();
-    config.videoDirectory=$("#frmVideoDirectory").val();
-    config.imageDuration=$("#frmImageDuration").val();
-    config.phase2threshold=$("#frmPhase2threshold").val();
-    config.phase1threshold=$("#frmPhase1threshold").val();
-    config.doneMedia=$("#frmDoneMedia").val();
-    config.display=parseInt($("#frmDisplay").val());
-    config.save();
+    // Loop thru all instances and collect data
+    var instances=[];
+    $("#tabs .tab").each(function(){
+        var instance={};
+        instance.startTime=$(this).find(".frmStartTime").val();
+        instance.endTime=$(this).find(".frmEndTime").val();
+        instance.videoDirectory=$(this).find(".frmVideoDirectory").val();
+        instance.imageDuration=$(this).find(".frmImageDuration").val();
+        instance.phase2threshold=$(this).find(".frmPhase2threshold").val();
+        instance.phase1threshold=$(this).find(".frmPhase1threshold").val();
+        instance.doneMedia=$(this).find(".frmDoneMedia").val();
+        instances.push(instance);
+    });
+    settings.instances=instances;
+    settings.display=parseInt($("#frmDisplay").val());
+    settings.save();
     main.initApp();
 }
 function handleVideoDirectoryBrowse(){
@@ -51,7 +118,8 @@ function handleVideoDirectoryBrowse(){
         message: "Please choose a directory.",
         properties: ['openDirectory','createDirectory']
     }, function(dir){
-        if(dir) $("#frmVideoDirectory").val(dir?dir[0]:"");
+        // TODO: This is a bit hackish, I'm shortcutting it and setting value of current visible field
+        if(dir) $(".frmVideoDirectory:visible").val(dir?dir[0]:"");
     });
 }
 function handleDoneMediaBrowse(){
@@ -60,13 +128,12 @@ function handleDoneMediaBrowse(){
         buttonLabel: "Select",
         message: "Choose an image or video."
     }, function(dir){
-        if(dir) $("#frmDoneMedia").val(dir?dir[0]:"");
+        // TODO: This is a bit hackish, I'm shortcutting it and setting value of current visible field
+        if(dir) $(".frmDoneMedia:visible").val(dir?dir[0]:"");
     });
 }
 $("#btnCancel").click(hideSettings);
 $("#btnSave").click(saveSettings);
-$("#frmVideoDirectoryBrowse").click(handleVideoDirectoryBrowse);
-$("#frmDoneMediaBrowse").click(handleDoneMediaBrowse);
 
 // Globals 
 var phase=9;
@@ -147,25 +214,31 @@ function initApp() {
     // Some cleanup if restarting
     $("#timer, #video, #done").removeClass("phase3 phase2 phase1 phase0");
     if(timer) clearTimeout(timer);
-    // Done materials
-    $("#donepic").hide();
-    $("#donevideo").hide();
-    if( isVideo(config.doneMedia) ) $("#donevideo").show().attr("src",config.doneMedia);
-    else if( isImage(config.doneMedia) ) $("#donepic").show().attr("src",config.doneMedia);
-    // Time
-    var today=new moment();
-    goal=new moment(today.format("MM/DD/YY")+" "+config.time);
+    // If no active config is available, don't try to do stuff you can't do without configs
+    if( config ) {
+        // Done materials
+        $("#donepic").hide();
+        $("#donevideo").hide();
+        if( isVideo(config.doneMedia) ) $("#donevideo").show().attr("src",config.doneMedia);
+        else if( isImage(config.doneMedia) ) $("#donepic").show().attr("src",config.doneMedia);
+        // End Time ("goal")
+        var today=new moment();
+        goal=new moment(today.format("MM/DD/YY")+" "+config.endTime);
+    }
     // Determine available playlist and setup the video element
     try {
         videos=fs.readdirSync(config.videoDirectory);
     } catch(e) {
         videos=[];
     }
-    // Final run
-    if( ! videos.length ) displaySettings();
-    setPhase(3);
-    loadRandomVideo();
-    updateTimer();
+    // Final run. Show settings if no videos (or no configs), otherwise proceed!
+    if( ! videos.length ) {
+        displaySettings();
+    } else {
+        setPhase(3);
+        loadRandomVideo();
+        updateTimer();
+    }
 }
 
 // Wire up events
@@ -190,6 +263,7 @@ $(window).mousemove(()=>{
     },2000);
 })
 $('#video').on('ended',loadRandomVideo);
+$("#create_tab").click(function(){addTab()});
 
 // Start things up (pick a video, start timer)
 initApp();
