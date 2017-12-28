@@ -23,6 +23,7 @@ var config=settings.instances.find(instance=>{
 });
 
 // Settings Form 
+const tabTemplate="<li class='tabli'><a id='tablink${tid}' href='#tab${tid}'>New</a> <i class='fa fa-close' data-id='${tid}'></i></li>";
 
 // Physically add a tab to the settings form
 function addTab(data=SettingsUtil.INSTANCEDEFAULTS) {
@@ -30,8 +31,10 @@ function addTab(data=SettingsUtil.INSTANCEDEFAULTS) {
     var tid=$("#tabs .tab").last().attr("id");
     if( tid===undefined ) tid="0";
     tid=parseInt(tid.replace("tab","")) + 1;
-    var li=$("<li/>").addClass("tabli").insertBefore("#list li:last");
-    $("<a/>", {text: "New", id: "tablink"+tid, href: "#tab"+tid}).appendTo(li);
+    $(tabTemplate.replace(/\$\{tid\}/g,tid))
+        .find("a").click(function(event){$(event.target).blur()}).end()
+        .find(".fa-close").click(handleCloseTab).end()
+        .insertBefore("#list li:last");
     var $newtab=$("#settingsTabTemplate").clone()
         .attr("id", "tab" + tid)
         .find(".frmVideoDirectoryBrowse").click(handleVideoDirectoryBrowse).end()
@@ -55,6 +58,13 @@ function populateTab($tab,data) {
         .find(".frmDoneMedia").val(data.doneMedia).end()
     if( data.startTime.length && data.endTime.length ) updateTabLink($tab);
 }
+// Close tab handler
+function handleCloseTab(event) {
+    var tid=$(event.target).attr("data-id");
+    $(event.target).closest("li").remove();
+    $("#tab"+tid).remove();
+    $("#tabs").tabs("refresh");
+}
 // Change event handler for the settings time fields
 function handleTimeChange(event) {
     updateTabLink($(event.target).closest(".tab"));
@@ -73,11 +83,11 @@ function updateTabLink(tab) {
     $tablink.text(txt);
 }
 function displaySettings() {
-    var $tabs = $("#tabs").tabs();
     // Clear out tabs
-    $tabs
+    $("#tabs")
         .find(".tabli").remove().end()
-        .find(".tab").remove().end();
+        .find(".tab").remove().end()
+        .tabs("refresh");
     // Rewrite tabse
     settings.instances.forEach(instance=>addTab(instance));
     if( settings.instances.length==0 ) addTab(); // If no instances, start a blank one
@@ -214,6 +224,7 @@ function initApp() {
     // Some cleanup if restarting
     $("#timer, #video, #done").removeClass("phase3 phase2 phase1 phase0");
     if(timer) clearTimeout(timer);
+    $("#tabs").tabs();
     // If no active config is available, don't try to do stuff you can't do without configs
     if( config ) {
         // Done materials
@@ -246,6 +257,7 @@ var btnpanelStatus=false;
 var btnpanelTimeout;
 $("#quit").click(()=>{main.quit()});
 $("#settings").click(displaySettings);
+$("#create_tab").click(function(e){$(e.target).blur()});
 $(window).keydown((e)=>{
     var key=e.key.toLowerCase();
     if( $(e.target).is("input") ) return true;

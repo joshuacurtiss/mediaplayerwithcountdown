@@ -118,6 +118,8 @@ body {
     padding: 1vh 1vw;
 }
 form div {clear:both; margin-bottom: 0.5vh;}
+#settingsForm .ui-tabs-anchor {padding: .4em .4em .4em .5em;}
+#settingsForm li .fa-close {padding: 0.6em 0.4em 0 0; cursor:pointer;}
 #settingsForm .tab {font-size: 1.3vh;}
 .settingsBtnContainer {margin-top: 2.5vh; padding-left: 5vw;}
 #settingsTabTemplate {display:none;}
@@ -136,4 +138,4 @@ form input {font-size: 1.1vh; border-radius: 5px; padding: 0.1vh 0.2vw;}
 form input[type=text] {width: 17vw;}
 form input[type=time] {width: 9vw;}
 form input[type=number] {width: 4vw;}
-form button {font-size: 1.3vh; padding: 0.4vh 1.2vw; margin-left: 1.5vw;}
+form button {font-size: 1.3vh; padding: 0.4vh 1.2vw; margin-right: 1.5vw;}
