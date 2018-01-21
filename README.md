@@ -8,6 +8,8 @@ A final video or image is displayed when the countdown time arrives.
 
 This functionality is especially useful in sign language meetings to play videos of the songs before the meeting, and you can display an image announcing the start of the meeting when the time comes.
 
+Information page for the app is at: <http://www.curtiss.me/mediaplayerwithcountdown>
+
 ## How do I compile it myself? ##
 
 The application runs on [Node.js](https://nodejs.org) and is compatible with Mac and Windows. to compile it, you will need Node.js installed.
