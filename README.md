@@ -12,12 +12,12 @@ Information page for the app is at: <http://www.curtiss.me/mediaplayerwithcountd
 
 ## How do I compile it myself? ##
 
-The application runs on [Node.js](https://nodejs.org) and is compatible with Mac and Windows. to compile it, you will need Node.js installed.
+The application runs on [Node.js](https://nodejs.org) and is compatible with Mac and Windows. to compile it, you will need Node.js and [Yarn](https://yarnpkg.com) installed.
 
 After you download or clone the source, install all dependencies and run the build script.
 It is named `build-installer-win` for Windows and `build-installer-mac` for Mac. For instance, to build for Windows:
 
 ```
-npm install
-npm run build-installer-win
+yarn install
+yarn build-installer-win
 ```

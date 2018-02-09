@@ -4,8 +4,8 @@ const moment=require("moment");
 require("moment-duration-format");
 const fs=require("fs-extra");
 const path=require("path");
-const jQuery=$=require("../bower_components/jquery/dist/jquery.min.js");
-require("../bower_components/jquery-ui/jquery-ui.min.js");
+const jQuery=$=require("jquery/dist/jquery");
+require("jquery-ui-dist/jquery-ui");
 
 // Link to main process
 const remote=require("electron").remote;
